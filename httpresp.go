@@ -12,13 +12,14 @@ import (
 // Send HTTP request and get http response without login and with gis info. Used
 // in get all post codes without login.
 func getHTTPResponseNoLoginWithGis(url, gis string) (b []byte, err error) {
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return
 	}
 
 	req.Header.Set("X-Requested-With", "XMLHttpRequest")
 	req.Header.Set("X-Instagram-GIS", gis)
+	req.Header.Set("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36")
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -38,7 +39,16 @@ func getHTTPResponseNoLoginWithGis(url, gis string) (b []byte, err error) {
 
 // Send HTTP request and get http response without login.
 func GetHTTPResponseNoLogin(url string) (b []byte, err error) {
-	resp, err := http.Get(url)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return
+	}
+
+	req.Header.Set("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+
 	if err != nil {
 		return
 	}
